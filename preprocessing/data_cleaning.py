@@ -3,7 +3,7 @@ Cleaning the Yelp dataset
 Output : train_df, test_df (pandas DataFrame)
 
 # Compile command :  
-python data_cleaning.py --dataset ./yelp_academic_dataset_review.pickle
+python data_cleaning.py --dataset ../yelp_academic_dataset_review.pickle
 """
 
 
