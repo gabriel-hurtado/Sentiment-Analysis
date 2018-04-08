@@ -32,9 +32,11 @@ from sklearn.model_selection import train_test_split
 from keras.preprocessing.text import Tokenizer
 from keras.preprocessing.sequence import pad_sequences
 from keras.utils import to_categorical
+from keras.models import Model
 from keras.layers import Dense, Input, Flatten, Dropout, Merge
 from keras.layers import Conv1D, MaxPooling1D, Embedding
-from keras.models import Model
+from keras.optimizers import Adam
+from keras.models import model_from_json
 from matplotlib import pyplot as plt
 
 # Making output consistent
@@ -178,8 +180,10 @@ model = ConvNet(embedding_weights, \
 
 
 ## Training the model
-model.compile(loss='categorical_crossentropy', \
-              optimizer='adam', \
+adam = Adam(lr=1e-4)
+
+model.compile(optimizer=adam, \
+              loss='categorical_crossentropy', \
               metrics=['acc'])
 
 history = model.fit(X_train, y_train, validation_data=(X_val, y_val), epochs=5, batch_size=128)
@@ -208,7 +212,7 @@ plt.plot(epochs, train_loss_values, 'r', label="Training loss")
 plt.plot(epochs, val_loss_values, 'b', label="Validation loss")
 plt.title("Training and validation loss")
 plt.xlabel("Epochs")
-plt.ylabel("Accuracy")
+plt.ylabel("Loss")
 plt.legend()
 
 ## Plotting the training and validation accuracy 
