@@ -14,8 +14,7 @@ You might need to install gensim package using either:
 - conda install -c anaconda gensim (anaconda environment)
 
 # Compile command : 
-	python ConvNet.py --dataset ../yelp_academic_dataset_review.pickle 
-	--word2vec ../GoogleNews-vectors-negative300.bin
+python ConvNet.py --dataset ../yelp_academic_dataset_review.pickle --word2vec ../GoogleNews-vectors-negative300.bin
 
 """
 
