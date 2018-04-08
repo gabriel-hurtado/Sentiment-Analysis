@@ -159,7 +159,7 @@ def ConvNet(embeddings, max_sequence_length, num_words, embedding_dim, trainable
     
     l_dense = Dense(128, activation='relu', name="Dense")(l_flat)
     
-    
+
     preds = Dense(6, activation='softmax', name="Output")(l_dense)
     
     model = Model(sequence_input, preds)
@@ -186,7 +186,9 @@ model.compile(optimizer=adam, \
               loss='categorical_crossentropy', \
               metrics=['acc'])
 
-history = model.fit(X_train, y_train, validation_data=(X_val, y_val), epochs=5, batch_size=128)
+# Set a small number of epochs to validate the model, then set this to be like 50, 100
+num_epochs = 5
+history = model.fit(X_train, y_train, validation_data=(X_val, y_val), epochs=num_epochs, batch_size=128)
 
 
 ## Serialize model to JSON
@@ -205,15 +207,18 @@ history_dict = history.history
 train_loss_values = history_dict['loss']
 val_loss_values = history_dict['val_loss']
 
-num_epochs = 5
 epochs = range(1, num_epochs + 1)
+
+plt.figure(num=1, figsize=(16, 12))
 
 plt.plot(epochs, train_loss_values, 'r', label="Training loss")
 plt.plot(epochs, val_loss_values, 'b', label="Validation loss")
-plt.title("Training and validation loss")
+plt.title("Training and validation loss", fontsize=12)
 plt.xlabel("Epochs")
 plt.ylabel("Loss")
 plt.legend()
+
+plt.show()
 
 ## Plotting the training and validation accuracy 
 history_dict = history.history
@@ -223,12 +228,37 @@ val_acc_values = history_dict['val_acc']
 num_epochs = 5
 epochs = range(1, num_epochs + 1)
 
+plt.figure(num=2, figsize=(16, 12))
+
 plt.plot(epochs, train_acc_values, 'r', label="Training accuracy")
 plt.plot(epochs, val_acc_values, 'b', label="Validation accuracy")
-plt.title("Training and validation accuracy")
+plt.title("Training and validation accuracy", fontsize=12)
 plt.xlabel("Epochs")
 plt.ylabel("Accuracy")
 plt.legend()
 
 plt.show()
 
+## Load model 
+#
+# # Load json and create model
+# with open("model_convnet.json", "r") as json_file:
+# 	loaded_model_json = json_file.read()
+# loaded_model = model_from_json(loaded_model_json)
+# # Load weights into new model
+# loaded_model.load_weights("model_convnet.h5")
+# print("Loaded model from disk")
+# 
+# 
+# ## Evaluate loaded model on test data
+# loaded_model.compile(optimizer=adam, \
+#               		loss='categorical_crossentropy', \
+#               		metrics=['acc'])
+# scores = loaded_model.evaluate(X_test, y_test, verbose=1) # Verbose=1 for progress bar
+# 
+# print("%s on test data: %.2f%%" % (loaded_model.metrics_names[1], scores[1]*100))
+
+
+## Evaluate model directly without loading json and hdf5 files
+scores = model.evaluate(X_test, y_test)
+print("%s on test data: %.2f%%" % (loaded_model.metrics_names[1], scores[1]*100))
