@@ -275,4 +275,4 @@ plt.show()
 
 ## Evaluate model directly without loading json and hdf5 files
 scores = model.evaluate(X_test, y_test)
-print("%s on test data: %.2f%%" % (loaded_model.metrics_names[1], scores[1]*100))
+print("%s on test data: %.2f%%" % (model.metrics_names[1], scores[1]*100))
