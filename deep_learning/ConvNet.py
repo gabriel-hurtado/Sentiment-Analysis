@@ -82,8 +82,8 @@ def count_vectorize(data):
     
     return embedding, count_vectorizer
 
-X = toy_data["text"].tolist()
-y = toy_data["stars"].tolist()
+X = data["text"].tolist()
+y = data["stars"].tolist()
 
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=seed)
 
