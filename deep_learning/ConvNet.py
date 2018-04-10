@@ -186,9 +186,24 @@ model.compile(optimizer=adam, \
               loss='categorical_crossentropy', \
               metrics=['acc'])
 
+## Create checkpoint that saves the weights each time validation set at each epoch is outperformed by the last one
+filepath="weights_best.hdf5"
+checkpoint = ModelCheckpoint(filepath, \
+                             monitor="val_acc", \
+                             verbose=1, \
+                             save_best_only=True, \
+                             mode="max")
+callbacks_list = [checkpoint]
+
+
 # Set a small number of epochs to validate the model, then set this to be like 50, 100
 num_epochs = 5
-history = model.fit(X_train, y_train, validation_data=(X_val, y_val), epochs=num_epochs, batch_size=128)
+history = model.fit(X_train, y_train, \
+	validation_data=(X_val, y_val), \
+	epochs=num_epochs, \
+	batch_size=128, \
+	callbacks=callbacks_list, \
+	verbose=1)
 
 
 ## Serialize model to JSON
@@ -225,7 +240,6 @@ history_dict = history.history
 train_acc_values = history_dict['acc']
 val_acc_values = history_dict['val_acc']
 
-num_epochs = 5
 epochs = range(1, num_epochs + 1)
 
 plt.figure(num=2, figsize=(16, 12))
