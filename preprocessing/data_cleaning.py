@@ -5,12 +5,13 @@ Output : train_df, test_df (pandas DataFrame)
 # Compile command :  
 python data_cleaning.py --dataset ../yelp_academic_dataset_review.pickle
 """
-
+#python data_cleaning.py --dataset /mnt/agp/ghurtado/sentiment/data/yelp_academic_dataset_review.pickle
 
 # remove warnings
 import warnings
 warnings.filterwarnings('ignore')
 
+import argparse
 import pandas as pd
 import numpy as np
 from sklearn.model_selection import train_test_split
@@ -57,7 +58,7 @@ test_df = np.vstack((X_test, y_test))
 train_df= pd.DataFrame({'text': train_df[0, :], 'stars': train_df[1, :]})
 test_df = pd.DataFrame({'text': test_df[0, :], 'stars': test_df[1, :]})
 
-train_df.to_csv("train_df.csv", index=False)
-test_df.to_csv("test_df.csv", index=False)
+train_df.to_csv("train_df.csv", index=False, encoding='utf-8')
+test_df.to_csv("test_df.csv", index=False, encoding='utf-8')
 
 print("Done")
