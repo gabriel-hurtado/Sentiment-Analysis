@@ -51,9 +51,9 @@ seed = 46
 parser = argparse.ArgumentParser()
 parser.add_argument("-d", "--dataset", required=True, \
 	help='path to Yelp dataset')
-parser.add_argument("-w", "--word2vec", require=True, \
+parser.add_argument("-w", "--word2vec", required=True, \
 	help='path to word2vec pre-trained model')
-args = parser.parse_args
+args = parser.parse_args()
 
 # Retrieve the path to files
 path_data = args.dataset
