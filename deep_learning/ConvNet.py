@@ -14,7 +14,7 @@ You might need to install gensim package using either:
 - conda install -c anaconda gensim (anaconda environment)
 
 # Compile command : 
-python ConvNet.py --dataset ../yelp_academic_dataset_review.pickle --word2vec ../GoogleNews-vectors-negative300.bin
+python ConvNet.py --dataset /mnt/agp/ghurtado/sentiment/data/yelp_academic_dataset_review.pickle --word2vec ../../GoogleNews-vectors-negative300.bin
 
 """
 
@@ -22,7 +22,7 @@ python ConvNet.py --dataset ../yelp_academic_dataset_review.pickle --word2vec ..
 # remove warnings
 import warnings
 warnings.filterwarnings('ignore')
-
+import gensim
 import argparse
 import pandas as pd
 import numpy as np
@@ -49,11 +49,9 @@ seed = 46
 """
 
 parser = argparse.ArgumentParser()
-parser.add_argument("-d", "--dataset", required=True, \
-	help='path to Yelp dataset')
-parser.add_argument("-w", "--word2vec", require=True, \
-	help='path to word2vec pre-trained model')
-args = parser.parse_args
+parser.add_argument("-d", "--dataset", required=True, help='path to Yelp dataset')
+parser.add_argument("-w", "--word2vec", required=True, help='path to word2vec pre-trained model')
+args = parser.parse_args()
 
 # Retrieve the path to files
 path_data = args.dataset
@@ -197,13 +195,8 @@ callbacks_list = [checkpoint]
 
 
 # Set a small number of epochs to validate the model, then set this to be like 50, 100
-num_epochs = 5
-history = model.fit(X_train, y_train, \
-	validation_data=(X_val, y_val), \
-	epochs=num_epochs, \
-	batch_size=128, \
-	callbacks=callbacks_list, \
-	verbose=1)
+num_epochs = 50
+history = model.fit(X_train, y_train, validation_data=(X_val, y_val), epochs=num_epochs, batch_size=128, callbacks=callbacks_list,verbose=1)
 
 
 ## Serialize model to JSON
@@ -234,7 +227,7 @@ plt.ylabel("Loss")
 plt.legend()
 
 plt.show()
-
+plt.savefig("loss.png")
 ## Plotting the training and validation accuracy 
 history_dict = history.history
 train_acc_values = history_dict['acc']
@@ -252,7 +245,7 @@ plt.ylabel("Accuracy")
 plt.legend()
 
 plt.show()
-
+plt.savefig('train_val.png')
 ## Load model 
 #
 # # Load json and create model
