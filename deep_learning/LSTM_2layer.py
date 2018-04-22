@@ -34,7 +34,7 @@ from keras.preprocessing.sequence import pad_sequences
 from keras.utils import to_categorical
 from keras.models import Model
 from keras.layers import Dense, Input, Dropout
-from keras.layers import LSTM, Activation
+from keras.layers import CuDNNLSTM, Activation
 from keras.optimizers import Adam
 from keras.models import model_from_json
 from matplotlib import pyplot as plt
@@ -149,11 +149,11 @@ def LSTM_2layer(embeddings, max_sequence_length, num_words, \
     embedded_sequences = embedding_layer(sequence_input)    
     
     # Propagate the embeddings through an LSTM layer with 128-dimensional hidden state
-    X = LSTM(128, return_sequences=True, name="LSTM_1")(embedded_sequences)
+    X = CuDNNLSTM(128, return_sequences=True)(embedded_sequences)
     # Add dropout with probability 0.5
     X = Dropout(0.5, name="Dropout_1")(X)
     # Propagate X through another LSTM layer with 128-dimensional hidden state
-    X = LSTM(128, return_sequences=False, name="LSTM_2")(X)
+    X = CuDNNLSTM(128, return_sequences=False)(X)
     # Add dropout with probability 0.5
     X = Dropout(0.5, name="Dropout_2")(X)
     # Propagate X through a Dense layer with softmax activation to get back a batch of 5-dimensional vectors.
@@ -197,7 +197,7 @@ callbacks_list = [checkpoint]
 
 
 # Set a small number of epochs to validate the model, then set this to be like 50, 100
-num_epochs = 5
+num_epochs = 50
 history = model.fit(X_train, y_train, \
 	validation_data=(X_val, y_val), \
 	epochs=num_epochs, \
